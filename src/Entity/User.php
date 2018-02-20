@@ -12,6 +12,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Annotations\Annotation\Enum as Enum;
 use Doctrine\ORM\Mapping\Cache;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -20,8 +21,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields="email", message="Email already taken")
- * @UniqueEntity(fields="username", message="Username already taken")
- * @Cache("NONSTRICT_READ_WRITE")
  */
 class User implements UserInterface, \Serializable
 {
@@ -45,11 +44,26 @@ class User implements UserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(type="string", unique=true)
-     * @Assert\NotBlank()
+     * @ORM\Column(type="string")
+     * @Assert\Regex("/^09\d{9}$/")
      */
-    private $username;
+    private $phoneNumber;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="RegistrationType")
+     * @ORM\JoinColumn(name="registration_type_id", referencedColumnName="id")
+     */
+    private $registrationType;
+
+    /**
+     * @Enum({"REGISTERED", "EMAIL_VERIFIED", "VERIFIED"})
+     */
+    private $state;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Payment", mappedBy="user")
+     */
+    private $payments;
     /**
      * @var string
      *
@@ -58,24 +72,42 @@ class User implements UserInterface, \Serializable
      */
     private $email;
 
+
     /**
      * @var string
      *
      * @ORM\Column(type="string")
-     * @Assert\Regex("/^\w+/")
      */
     private $password;
 
-    private $plain_password;
+    /**
+     * @var string
+     */
+    private $plain_password = '';
 
     /**
      * @var array
      *
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="array")
      */
     private $roles = [];
 
-    public function getId(): int
+    /**
+     * @ORM\OneToMany(targetEntity="Article", mappedBy="user")
+     */
+    private $articles;
+    /**
+     * @ORM\OneToMany(targetEntity="SummaryArticle", mappedBy="user")
+     */
+    private $summary_articles;
+
+
+    /**
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    private $paid = false;
+
+    public function getId()
     {
         return $this->id;
     }
@@ -92,13 +124,9 @@ class User implements UserInterface, \Serializable
 
     public function getUsername()
     {
-        return $this->username;
+        return $this->getEmail();
     }
 
-    public function setUsername(string $username): void
-    {
-        $this->username = $username;
-    }
 
     public function getEmail()
     {
@@ -121,19 +149,22 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getPlainPassword()
+    public function getPlainPassword(): string
     {
         return $this->plain_password;
     }
 
     /**
-     * @param mixed $plain_password
+     * @param string $plain_password
      */
     public function setPlainPassword($plain_password)
     {
+        if ($plain_password == '' || $plain_password == null)
+            return;
         $this->plain_password = $plain_password;
+        $this->password = '';
     }
 
 
@@ -201,7 +232,7 @@ class User implements UserInterface, \Serializable
      */
     public function serialize(): string
     {
-        return serialize([$this->id, $this->username, $this->password]);
+        return serialize([$this->id, $this->email, $this->password]);
     }
 
     /**
@@ -209,6 +240,131 @@ class User implements UserInterface, \Serializable
      */
     public function unserialize($serialized): void
     {
-        [$this->id, $this->username, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
+        [$this->id, $this->email, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
     }
+
+    /**
+     * @return string
+     */
+    public function getPhoneNumber()
+    {
+        return $this->phoneNumber;
+    }
+
+    /**
+     * @param string $phoneNumber
+     */
+    public function setPhoneNumber(string $phoneNumber)
+    {
+        $this->phoneNumber = $phoneNumber;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRegistrationType()
+    {
+        return $this->registrationType;
+    }
+
+    /**
+     * @param mixed $registrationType
+     */
+    public function setRegistrationType($registrationType)
+    {
+        $this->registrationType = $registrationType;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param mixed $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPayments()
+    {
+        return $this->payments;
+    }
+
+    /**
+     * @param mixed $payments
+     */
+    public function setPayments($payments)
+    {
+        $this->payments = $payments;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getArticles()
+    {
+        return $this->articles;
+    }
+
+    /**
+     * @param mixed $articles
+     */
+    public function setArticles($articles)
+    {
+        $this->articles = $articles;
+    }
+
+    public function __toString()
+    {
+        return sprintf("%s (%s)", $this->fullName, $this->getEmail());
+    }
+
+    public function isPaymentDone()
+    {
+        return $this->getPaid();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPaid()
+    {
+        return $this->paid;
+    }
+
+    /**
+     * @param mixed $paid
+     */
+    public function setPaid($paid)
+    {
+        $this->paid = $paid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSummaryArticles()
+    {
+        return $this->summary_articles;
+    }
+
+    /**
+     * @param mixed $summary_articles
+     */
+    public function setSummaryArticles($summary_articles)
+    {
+        $this->summary_articles = $summary_articles;
+    }
+
+
 }

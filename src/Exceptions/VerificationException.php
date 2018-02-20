@@ -9,7 +9,13 @@
 namespace App\Exception;
 
 
-class VerificationException
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+
+class VerificationException extends AuthenticationException
 {
+    public function getMessageKey()
+    {
+        return 'Your account has not been verified.';
+    }
 
 }
