@@ -39,7 +39,16 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="string")
      * @Assert\NotBlank()
      */
-    private $fullName;
+    private $firstName;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     * @Assert\NotBlank()
+     */
+    private $lastname;
 
     /**
      * @var string
@@ -50,10 +59,12 @@ class User implements UserInterface, \Serializable
     private $phoneNumber;
 
     /**
-     * @ORM\ManyToOne(targetEntity="RegistrationType")
-     * @ORM\JoinColumn(name="registration_type_id", referencedColumnName="id")
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     * @Assert\Regex("/^\d{10}$/")
      */
-    private $registrationType;
+    private $nationalCode;
 
     /**
      * @Enum({"REGISTERED", "EMAIL_VERIFIED", "VERIFIED"})
@@ -112,14 +123,9 @@ class User implements UserInterface, \Serializable
         return $this->id;
     }
 
-    public function setFullName(string $fullName): void
-    {
-        $this->fullName = $fullName;
-    }
-
     public function getFullName()
     {
-        return $this->fullName;
+        return $this->firstName . ' ' . $this->lastname;
     }
 
     public function getUsername()
@@ -259,22 +265,6 @@ class User implements UserInterface, \Serializable
         $this->phoneNumber = $phoneNumber;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getRegistrationType()
-    {
-        return $this->registrationType;
-    }
-
-    /**
-     * @param mixed $registrationType
-     */
-    public function setRegistrationType($registrationType)
-    {
-        $this->registrationType = $registrationType;
-    }
-
 
     /**
      * @return mixed
@@ -326,7 +316,7 @@ class User implements UserInterface, \Serializable
 
     public function __toString()
     {
-        return sprintf("%s (%s)", $this->fullName, $this->getEmail());
+        return sprintf("%s (%s)", $this->getFullName(), $this->getEmail());
     }
 
     public function isPaymentDone()
@@ -364,6 +354,54 @@ class User implements UserInterface, \Serializable
     public function setSummaryArticles($summary_articles)
     {
         $this->summary_articles = $summary_articles;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNationalCode()
+    {
+        return $this->nationalCode;
+    }
+
+    /**
+     * @param mixed $nationalCode
+     */
+    public function setNationalCode($nationalCode)
+    {
+        $this->nationalCode = $nationalCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param string $firstName
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * @param string $lastname
+     */
+    public function setLastname($lastname)
+    {
+        $this->lastname = $lastname;
     }
 
 

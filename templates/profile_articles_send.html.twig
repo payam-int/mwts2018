@@ -1,0 +1,33 @@
+{% extends 'profile.html.twig' %}
+{% block title %}Conference{% endblock %}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+{% block content %}
+    <h1 class="pb-3">Send abstract</h1>
+    <p>You have to follow these steps to send your paper:
+    <ol>
+        <li>Send abstract</li>
+        <li>Pay for abstract</li>
+        <li>Verify abstract</li>
+        <li>Send paper</li>
+        <li>Pay for paper</li>
+    </ol>
+    </p>
+
+
+    <div class="card">
+        <div class="card-body">
+            <h4 class="pb-1">Send file</h4>
+            <div class="ui-form">
+                {{ form_start(form) }}
+                <div class="row mb-2">
+                    <div class="col-8">{{ form_row(form.title) }}</div>
+                    <div class="col-4">{{ form_row(form.file) }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h4 class="pt-4 pb-1">Invoice</h4>
+    {% include 'invoice_abstract.html.twig' %}
+    <button type="submit" class="btn btn-primary btn-large my-4">Send paper</button>
+    {{ form_end(form) }}
+{% endblock %}

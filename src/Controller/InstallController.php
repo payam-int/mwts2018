@@ -41,7 +41,8 @@ class InstallController extends Controller
 
         $user = new User();
 
-        $user->setFullName('Admin');
+        $user->setFirstName('Admin');
+        $user->setLastname('Admin');
         $user->setPhoneNumber('09120000000');
 
         $form = $this->createForm(InstallFormType::class, $user);

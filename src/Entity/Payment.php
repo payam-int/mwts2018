@@ -10,6 +10,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Payment
 {
+
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -31,6 +33,12 @@ class Payment
     private $price;
 
     /**
+     * @var string
+     * @ORM\Column(type="string")
+     */
+    private $online_payment_price;
+
+    /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="payments")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
@@ -42,6 +50,35 @@ class Payment
      * @ORM\Column(type="integer")
      */
     private $state = 0;
+
+    /**
+     * @var array
+     * @ORM\Column(type="json")
+     */
+    private $metadata = [];
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $done = false;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Discount", mappedBy="payment")
+     */
+    private $discounts;
+
+    /**
+     * Payment constructor.
+     * @param string $price
+     * @param $user
+     */
+    public function __construct($price, $user)
+    {
+        $this->price = $price;
+        $this->online_payment_price = $price;
+        $this->user = $user;
+    }
 
     /**
      * @return mixed
@@ -122,6 +159,77 @@ class Payment
     {
         $this->state = $state;
     }
+
+    /**
+     * @return array
+     */
+    public function getMetadata(): array
+    {
+        return $this->metadata;
+    }
+
+    /**
+     * @param array $metadata
+     */
+    public function setMetadata(array $metadata)
+    {
+        $this->metadata = $metadata;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOnlinePaymentPrice()
+    {
+        return $this->online_payment_price;
+    }
+
+    /**
+     * @param mixed $online_payment_price
+     */
+    public function setOnlinePaymentPrice($online_payment_price)
+    {
+        $this->online_payment_price = $online_payment_price;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDiscounts()
+    {
+        return $this->discounts;
+    }
+
+    /**
+     * @param mixed $discounts
+     */
+    public function setDiscounts($discounts)
+    {
+        $this->discounts = $discounts;
+    }
+
+    public function calcAmount()
+    {
+        return $this->getPrice();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDone()
+    {
+        return $this->done;
+    }
+
+    /**
+     * @param mixed $done
+     */
+    public function setDone($done)
+    {
+        $this->done = $done;
+    }
+
+
 
 
 }

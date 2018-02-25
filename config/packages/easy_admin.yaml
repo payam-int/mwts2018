@@ -7,10 +7,12 @@ easy_admin:
         - Article
         - SummaryArticle
         - Payment
-        - RegistrationType
+        - Discount
     entities:
         # List the entity class name you want to manage
-
+      Discount:
+        class: App\Entity\Discount
+        label: 'Discounts'
       User:
         class: App\Entity\User
         label: 'Users'
@@ -19,19 +21,9 @@ easy_admin:
             - fullName
             - phoneNumber
             - email
-            - registrationType
             - paid
             - {property: 'plainPassword', label: 'Password', type: 'password'}
-            - {property: roles, label: 'User roles', help: 'ROLE_SEND_ARTICLE for giving access sending article.'}
-
-      RegistrationType:
-        class: App\Entity\RegistrationType
-        label: 'Registration Types'
-        form:
-          fields:
-            - price
-            - name
-            - description
+            - {property: 'national_code', label: 'National code', type: 'text'}
             - {property: roles, label: 'User roles', help: 'ROLE_SEND_ARTICLE for giving access sending article.'}
 
       Payment:
@@ -41,7 +33,7 @@ easy_admin:
         label: 'Summary of articles'
         class: App\Entity\SummaryArticle
         list:
-          fields: ['title', 'user','state']
+          fields: ['title', 'user','paid','accepted','reviewed']
           actions:
             - {name: 'download_file', label: 'Download File', type: 'route'}
             - {name: 'checking_article', label: 'Check/Confirm', type: 'route'}
@@ -49,7 +41,7 @@ easy_admin:
         label: 'Articles'
         class: App\Entity\Article
         list:
-          fields: ['summary','user','state']
+          fields: ['summary','user','paid']
           actions:
             - {name: 'download_file', label: 'Download File', type: 'route'}
             - {name: 'checking_article', label: 'Check/Confirm', type: 'route'}

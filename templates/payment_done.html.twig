@@ -1,0 +1,13 @@
+{% extends 'profile.html.twig' %}
+{% block title %}Payment{% endblock %}
+{% block content %}
+    {% if payment.done %}
+        <h1 class="pb-3">Payment done</h1>
+        <p>Payment done successfully.</p>
+        <a href="{{ url('profile') }}">Return to profile</a>
+    {% else %}
+        <h1 class="pb-3">Payment error</h1>
+        <p>There was an error in your payment. please contact administrator.</p>
+    {% endif %}
+
+{% endblock %}

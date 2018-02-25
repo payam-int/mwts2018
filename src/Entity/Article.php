@@ -26,12 +26,6 @@ class Article
     private $user;
 
     /**
-     * @Enum({"Sent","Checking","Confirmed"})
-     * @ORM\Column(type="string")
-     */
-    private $state = 'Sent';
-
-    /**
      * @ORM\Column(type="string")
      *
      * @Assert\NotBlank(message="Please, upload the article as a PDF file.")
@@ -45,6 +39,17 @@ class Article
      * @ORM\JoinColumn(name="summary_id", referencedColumnName="id")
      */
     private $summary;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $paid = false;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Payment")
+     * @ORM\JoinColumn(name="payment_id", referencedColumnName="id")
+     */
+    private $payment;
 
     /**
      * @return mixed
@@ -115,6 +120,8 @@ class Article
      */
     public function getSummary()
     {
+        if($this->summary == null)
+            return new SummaryArticle();
         return $this->summary;
     }
 
@@ -126,7 +133,8 @@ class Article
         $this->summary = $summary;
     }
 
-    public function getTitle(){
+    public function getTitle()
+    {
         return $this->getSummary()->getTitle();
     }
 
@@ -134,6 +142,40 @@ class Article
     {
         return $this->getSummary()->getTitle();
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPaid()
+    {
+        return $this->paid;
+    }
+
+    /**
+     * @param mixed $paid
+     */
+    public function setPaid($paid)
+    {
+        $this->paid = $paid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPayment()
+    {
+        return $this->payment;
+    }
+
+    /**
+     * @param mixed $payment
+     */
+    public function setPayment($payment)
+    {
+        $this->payment = $payment;
+    }
+
+
 
 
 }

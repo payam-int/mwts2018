@@ -16,7 +16,7 @@ class SummaryArticleType extends AbstractType
     {
         $builder
             ->add('title', TextType::class)
-            ->add('file', FileType::class, ['label' => 'Summary of article as PDF']);
+            ->add('file', FileType::class, ['label' => 'Summary']);
     }
 
     public function configureOptions(OptionsResolver $resolver)

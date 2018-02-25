@@ -15,18 +15,14 @@ class SummaryArticleRepository extends ServiceEntityRepository
         parent::__construct($registry, SummaryArticle::class);
     }
 
-    /*
-    public function findBySomething($value)
+
+    public function findByUser($value)
     {
         return $this->createQueryBuilder('s')
-            ->where('s.something = :value')->setParameter('value', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
+            ->orderBy('s.id', 'DESC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
 
 
     public function getConfirmedSummaryArticlesByUser(User $user)

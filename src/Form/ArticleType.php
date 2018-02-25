@@ -16,19 +16,13 @@ class ArticleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('summary', EntityType::class, [
-                'class' => SummaryArticle::class,
-                'query_builder' => $options['confirmed_query_builder']
-            ])
             ->add('file', FileType::class, ['label' => 'Article as PDF']);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired('confirmed_query_builder');
         $resolver->setDefaults([
             // uncomment if you want to bind to a class
-            'confirmed_query_builder' => null,
         ]);
 
     }

@@ -1,0 +1,160 @@
+{% extends 'profile.html.twig' %}
+{% block title %}Conference{% endblock %}
+{% block content %}
+    <h1 class="pb-3">Paper</h1>
+    <h3 class="py-2">{{ article.title }}</h3>
+    <table class="table">
+        <tbody>
+        <tr>
+            <th scope="row">Send abstract</th>
+            <td>
+                <div class="badge badge-success">Yes</div>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Pay for abstract</th>
+            <td>{% if not article.paid %}
+                    <div class="badge badge-danger">No</div>
+                {% else %}
+                    <div class="badge badge-success">Yes</div>
+                {% endif %}</td>
+        </tr>
+        {% if not article.accepted and article.reviewed %}
+            <tr>
+                <th scope="row">Abstract Rejected</th>
+                <td>{% if not article.accepted %}
+                        <div class="badge badge-danger">Yes</div>
+                    {% else %}
+                        <div class="badge badge-success">No</div>
+                    {% endif %}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <th scope="row">Abstract Accepted</th>
+                <td>{% if not article.accepted %}
+                        <div class="badge badge-danger">No</div>
+                    {% else %}
+                        <div class="badge badge-success">Yes</div>
+                    {% endif %}</td>
+            </tr>
+            <tr>
+                <th scope="row">Paper sent</th>
+                <td>
+                    {% if article.article %}
+                        <div class="badge badge-success">Yes</div>
+                    {% else %}
+                        <div class="badge badge-danger">No</div>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Paid for paper</th>
+                <td>
+                    {% if article.article and article.article.paid %}
+                        <div class="badge badge-success">Yes</div>
+                    {% else %}
+                        <div class="badge badge-danger">No</div>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+
+    {% if (not article.reviewed or article.accepted) and not (article.article and article.article.paid) %}
+        <h4 class="pt-3">Your have to</h4>
+        {% if not article.paid %}
+            <a href="{{ url('payment_abstract', {id: article.id}) }}" class="btn btn-primary">Pay abstract invoice</a>
+        {% endif %}
+        {% if article.accepted and not article.article %}
+            <a href="{{ url('profile_papers_send', {id: article.id}) }}" class="btn btn-primary">Send your paper</a>
+        {% endif %}
+        {% if article.article and not article.article.paid %}
+            <a href="{{ url('payment_paper', {id: article.article.id}) }}" class="btn btn-primary">Pay paper invoice</a>
+        {% endif %}
+        {% if not article.reviewed %}
+            Wait until your paper been reviewed.
+        {% endif %}
+    {% endif %}
+
+
+    {#{% for article in articles %}#}
+    {#<div class="card my-2">#}
+    {#<div class="card-body">#}
+    {#<h4 class="card-title">{{ article.title }}</h4>#}
+    {#<table class="table table-no-border-top">#}
+    {#<tbody>#}
+    {#<tr>#}
+    {#<th scope="row">Send abstract</th>#}
+    {#<td>#}
+    {#<div class="badge badge-success">Done</div>#}
+    {#</td>#}
+    {#</tr>#}
+    {#<tr>#}
+    {#<th scope="row">Pay for abstract</th>#}
+    {#<td>{% if not article.paid %}#}
+    {#<a href="{{ url('profile_pay_article_summary', {'id':article.id}) }}">Pay</a>#}
+    {#{% else %}#}
+    {#<div class="badge badge-success">Yes</div>#}
+    {#{% endif %}</td>#}
+    {#</tr>#}
+    {#<tr>#}
+    {#<th scope="row">Abstract status</th>#}
+    {#<td>{% if article.isAccepted %}#}
+    {#<div class="badge badge-success">Accepted</div>#}
+    {#{% elseif article.state == 'Rejected' %}#}
+    {#<div class="badge badge-danger">Rejected</div>#}
+    {#{% else %}#}
+    {#{% if article.paid %}#}
+    {#<div class="badge badge-default">Sent</div>#}
+    {#{% else %}#}
+    {#<div class="badge badge-warning">Payment</div>#}
+    {#{% endif %}#}
+    {#{% endif %}</td>#}
+    {#</tr>#}
+    {#<tr>#}
+    {#<th scope="row">Paper sent</th>#}
+    {#<td>#}
+    {#{% if article.article %}#}
+    {#<div class="badge badge-success">Yes</div>#}
+    {#{% else %}#}
+    {#<div class="badge badge-danger">No</div>#}
+    {#{% endif %}#}
+    {#</td>#}
+    {#</tr>#}
+    {#<tr>#}
+    {#<th scope="row">Paid for paper</th>#}
+    {#<td>#}
+    {#{% if article.article %}#}
+    {#{% if article.article.paid %}#}
+    {#<div class="badge badge-success">Yes</div>#}
+    {#{% else %}#}
+
+    {#{% endif %}#}
+    {#{% else %}#}
+    {#<div class="badge badge-danger">No</div>#}
+    {#{% endif %}#}
+    {#</td>#}
+    {#</tr>#}
+    {#{% if article.article %}#}
+    {#<tr>#}
+    {#<th scope="row">Paper status</th>#}
+    {#<td>#}
+    {#{% if article.article and article.article.paid %}#}
+    {#<div class="badge badge-success">Yes</div>#}
+    {#{% else %}#}
+    {#<div class="badge badge-danger">Not sent</div>#}
+    {#{% endif %}#}
+    {#</td>#}
+    {#</tr>#}
+    {#{% endif %}#}
+    {#</tbody>#}
+    {#</table>#}
+    {#</div>#}
+    {#</div>#}
+    {#{% else %}#}
+    {#<p><em>No article sent.</em></p>#}
+    {#{% endfor %}#}
+
+
+{% endblock %}

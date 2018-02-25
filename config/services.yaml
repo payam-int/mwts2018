@@ -4,6 +4,22 @@ parameters:
     locale: 'en'
     summary_articles_dir: 'articles/summary/'
     full_articles_dir: 'articles/full/'
+    bank_params:
+      groupid: 449
+      username: mwtskhalaj
+      password: khalaj@MWTS5958qazx
+      bankid: 1
+      prefix: 123
+    papers:
+      abstract:
+        price: 150000
+        discount: 150000
+      paper:
+        price: 200000
+        discount: 200000
+    payment_debug: true
+
+
 
 services:
     # default configuration for services in *this* file

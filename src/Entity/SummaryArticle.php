@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Annotations\Annotation\Enum as Enum;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -31,10 +32,20 @@ class SummaryArticle
     private $title;
 
     /**
-     * @Enum({"Sent", "Checking", "Checked"})
-     * @ORM\Column(type="string", nullable=True)
+     * @ORM\Column(type="boolean")
      */
-    private $state = 'Sent';
+    private $reviewed = false;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $accepted = false;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $paid = false;
+
 
     /**
      * @ORM\Column(type="string")
@@ -49,6 +60,11 @@ class SummaryArticle
      * @ORM\JoinColumn(name="article_id", referencedColumnName="id")
      */
     private $article;
+    /**
+     * @ORM\OneToOne(targetEntity="Payment")
+     * @ORM\JoinColumn(name="payment_id", referencedColumnName="id")
+     */
+    private $payment;
 
     /**
      * @return mixed
@@ -66,21 +82,6 @@ class SummaryArticle
         $this->user = $user;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
-
-    /**
-     * @param mixed $state
-     */
-    public function setState($state)
-    {
-        $this->state = $state;
-    }
 
     /**
      * @return mixed
@@ -148,8 +149,74 @@ class SummaryArticle
 
     public function __toString()
     {
-        return $this->getTitle();
+        return $this->getTitle() ?? '';
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPaid()
+    {
+        return $this->paid;
+    }
+
+    /**
+     * @param mixed $paid
+     */
+    public function setPaid($paid)
+    {
+        $this->paid = $paid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReviewed()
+    {
+        return $this->reviewed;
+    }
+
+    /**
+     * @param mixed $reviewed
+     */
+    public function setReviewed($reviewed)
+    {
+        $this->reviewed = $reviewed;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAccepted()
+    {
+        return $this->accepted;
+    }
+
+    /**
+     * @param mixed $accepted
+     */
+    public function setAccepted($accepted)
+    {
+        $this->accepted = $accepted;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPayment()
+    {
+        return $this->payment;
+    }
+
+    /**
+     * @param mixed $payment
+     */
+    public function setPayment($payment)
+    {
+        $this->payment = $payment;
+    }
+
+
 
 
 }

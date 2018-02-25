@@ -1,124 +1,119 @@
 {% extends 'base.html.twig' %}
-{% if can_send_articles %}
-    {% form_theme summaryForm 'bootstrap_4_layout.html.twig' %}
-    {% form_theme articleForm 'bootstrap_4_layout.html.twig' %}
-{% endif %}
+{% block title %}Profile{% endblock %}
 {% block body %}
     <div class="container py-5">
-        {% if can_send_articles and showArticleForm %}
-            <div class="card my-3">
-                <div class="card-header">
-                    Send Article's full text
-                </div>
-                <div class="card-body">
-
-                    <div>
-                        {{ form_start(articleForm) }}
-                        <div class="row mb-2">
-                            <div class="col-8">{{ form_row(articleForm.summary) }}</div>
-                            <div class="col-4">{{ form_row(articleForm.file) }}</div>
-
+        <div class="row">
+            <div class="col-md-3 pb-5">
+                <div class="sticky-top">
+                    <div class="logo py-4 px-5">
+                        <img src="{{ asset('assets/images/mwts2018.svg') }}">
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <nav class="nav nav-fill flex-column">
+                                <a class="nav-link active" href="{{ url('profile') }}">Conference</a>
+                                <a class="nav-link disabled" href="#">Buy Ticket</a>
+                                <a class="nav-link" href="{{ url('profile_articles') }}">Papers</a>
+                                <a class="nav-link" href="{{ url('profile_edit') }}">Edit information</a>
+                                <a class="nav-link" href="{{ url('logout') }}">Logout</a>
+                                <a class="nav-link" href="#">Return to website</a>
+                            </nav>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-large">Send article</button>
-                        {{ form_end(articleForm) }}
                     </div>
                 </div>
             </div>
-        {% endif %}
-        <div class="card my-2">
-            <div class="card-header">
-                Payment
-            </div>
-            <div class="card-body">
-
-                {% if not user.isPaymentDone and user.registrationType %}
-                    <h5 class="card-title">{Some text}</h5>
-                    <p class="card-text">{Some text}</p>
-
-
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th scope="col">Register as</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Description</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>{{ user.registrationType.name }}</td>
-                            <td>{{ user.registrationType.price }} ریال</td>
-                            <td>{{ user.registrationType.description }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <a href="#" class="btn btn-primary float-right">Pay</a>
-                {% else %}
-                    <h5 class="card-title">Payment is done.</h5>
-                    <p class="card-text">You paid your registration ticket.</p>
-                {% endif %}
-
-
+            <div class="col-md-9 pt-3">
+                {% block content %}{% endblock %}
             </div>
         </div>
-        {% if can_send_articles %}
-            <div class="card my-3">
-                <div class="card-header">
-                    Articles
-                </div>
-                <div class="card-body">
-                    <p class="card-text">First, you have to send summary of your article. After confirmation you can
-                        send
-                        your article.</p>
-                    {#{{ form_start(summaryForm) }}#}
-                    {#{{ form_widget(summaryForm) }}#}
-                    {#<button type="submit" class="btn btn-primary">Send</button>#}
-                    {#{{ form_end(summaryForm) }}#}
 
-                    <br>
-                    <h5>Sent articles:</h5>
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Full article text</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for article in user.summaryArticles %}
-                            <tr>
-                                <th scope="row">{{ article.id }}</th>
-                                <td>{{ article.title }}</td>
-                                <td>{{ article.state }}</td>
-                                <td>
-                                    {% if article.article %}
-                                        {{ article.article.state }}
-                                    {% else %}
-                                        -
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-
-                    <div>
-                        <h5 class="pt-5 pb-3">Send a new article</h5>
-
-                        {{ form_start(summaryForm) }}
-                        <div class="row mb-2">
-                            <div class="col-8">{{ form_row(summaryForm.title) }}</div>
-                            <div class="col-4">{{ form_row(summaryForm.file) }}</div>
-
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-large">Send summary</button>
-                        {{ form_end(summaryForm) }}
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-        <a href="{{ url('logout') }}" class="btn btn-danger">Logout</a>
     </div>
 {% endblock %}
+
+        {#{% if can_send_articles and showArticleForm %}#}
+        {#<div class="card my-3">#}
+        {#<div class="card-header">#}
+        {#Send Article's full text#}
+        {#</div>#}
+        {#<div class="card-body">#}
+
+        {#<div>#}
+        {#{{ form_start(articleForm) }}#}
+        {#<div class="row mb-2">#}
+        {#<div class="col-8">{{ form_row(articleForm.summary) }}</div>#}
+        {#<div class="col-4">{{ form_row(articleForm.file) }}</div>#}
+
+        {#</div>#}
+        {#<button type="submit" class="btn btn-primary btn-large">Send article</button>#}
+        {#{{ form_end(articleForm) }}#}
+        {#</div>#}
+        {#</div>#}
+        {#</div>#}
+        {#{% endif %}#}
+        {#<div class="card my-2">#}
+        {#<div class="card-header">#}
+        {#Payment#}
+        {#</div>#}
+        {#<div class="card-body">#}
+
+        {#</div>#}
+        {#</div>#}
+        {#{% if can_send_articles %}#}
+        {#<div class="card my-3">#}
+        {#<div class="card-header">#}
+        {#Articles#}
+        {#</div>#}
+        {#<div class="card-body">#}
+        {#<p class="card-text">First, you have to send summary of your article. After confirmation you can#}
+        {#send#}
+        {#your article.</p>#}
+        {#{{ form_start(summaryForm) }}#}
+        {#{{ form_widget(summaryForm) }}#}
+        {#<button type="submit" class="btn btn-primary">Send</button>#}
+        {#{{ form_end(summaryForm) }}#}
+
+        {#<br>#}
+        {#<h5>Sent articles:</h5>#}
+        {#<table class="table table-striped">#}
+        {#<thead>#}
+        {#<tr>#}
+        {#<th scope="col">#</th>#}
+        {#<th scope="col">Title</th>#}
+        {#<th scope="col">Status</th>#}
+        {#<th scope="col">Full article text</th>#}
+        {#</tr>#}
+        {#</thead>#}
+        {#<tbody>#}
+        {#{% for article in user.summaryArticles %}#}
+        {#<tr>#}
+        {#<th scope="row">{{ article.id }}</th>#}
+        {#<td>{{ article.title }}</td>#}
+        {#<td>{{ article.state }}</td>#}
+        {#<td>#}
+        {#{% if article.article %}#}
+        {#{{ article.article.state }}#}
+        {#{% else %}#}
+        {#-#}
+        {#{% endif %}#}
+        {#</td>#}
+        {#</tr>#}
+        {#{% endfor %}#}
+        {#</tbody>#}
+        {#</table>#}
+
+        {#<div>#}
+        {#<h5 class="pt-5 pb-3">Send a new article</h5>#}
+
+        {#{{ form_start(summaryForm) }}#}
+        {#<div class="row mb-2">#}
+        {#<div class="col-8">{{ form_row(summaryForm.title) }}</div>#}
+        {#<div class="col-4">{{ form_row(summaryForm.file) }}</div>#}
+
+        {#</div>#}
+        {#<button type="submit" class="btn btn-primary btn-large">Send summary</button>#}
+        {#{{ form_end(summaryForm) }}#}
+        {#</div>#}
+        {#</div>#}
+        {#</div>#}
+        {#{% endif %}#}
+        {#<a href="{{ url('logout') }}" class="btn btn-danger">Logout</a>#}

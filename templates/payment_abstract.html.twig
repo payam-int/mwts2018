@@ -1,0 +1,9 @@
+{% extends 'profile.html.twig' %}
+{% block title %}Payment{% endblock %}
+{% block content %}
+    <h1 class="pb-3">Invoice</h1>
+    {% include 'invoice_abstract.html.twig' %}
+    {{ form_start(form) }}
+    <button type="submit" class="btn btn-primary">Pay online</button>
+    {{ form_end(form) }}
+{% endblock %}

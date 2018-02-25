@@ -5,13 +5,12 @@
     <title>{% block title %}Welcome!{% endblock %}</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="{{ asset('assets/css/base.css') }}">
     {% block stylesheets %}{% endblock %}
 
 </head>
 <body>
 
-<a href="http://mwts2018.sharif.edu" type="button" class="btn btn-secondary btn-lg btn-block">Return to website</a>
 {% block body %}{% endblock %}
 {% block javascripts %}{% endblock %}
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

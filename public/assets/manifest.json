@@ -1,4 +1,7 @@
 {
-  "assets/css/login.css": "/assets/css/login.css",
-  "assets/css/register.css": "/assets/css/register.css"
+  "assets/css/base.css": "/assets/css/base.00f231d89022cace723f7c693f02ddcb.css",
+  "assets/css/login.css": "/assets/css/login.52bec3bbdb814a2eae01a0bf9a34769b.css",
+  "assets/css/register.css": "/assets/css/register.9d43212207c05f1759093c10f5b9207a.css",
+  "assets/images/mwts2018.svg": "/assets/images/mwts2018.9e2a6414.svg",
+  "assets/js/assets.js": "/assets/js/assets.ffc8e0ab1505a58bef59.js"
 }
