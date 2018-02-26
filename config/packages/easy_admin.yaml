@@ -36,7 +36,6 @@ easy_admin:
           fields: ['title', 'user','paid','accepted','reviewed']
           actions:
             - {name: 'download_file', label: 'Download File', type: 'route'}
-            - {name: 'checking_article', label: 'Check/Confirm', type: 'route'}
       Article:
         label: 'Articles'
         class: App\Entity\Article
@@ -44,5 +43,4 @@ easy_admin:
           fields: ['summary','user','paid']
           actions:
             - {name: 'download_file', label: 'Download File', type: 'route'}
-            - {name: 'checking_article', label: 'Check/Confirm', type: 'route'}
 
