@@ -1,0 +1,8 @@
+{% extends 'profile.html.twig' %}
+{% block title %}Payment{% endblock %}
+{% block content %}
+        <h1 class="pb-3">Payment error</h1>
+        <p>There is a problem with your payment. </p>
+        <p>{{ message }}</p>
+        <a href="{{ url('profile') }}">Return to profile</a>
+{% endblock %}

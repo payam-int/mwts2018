@@ -7,6 +7,7 @@ use App\Entity\Discount;
 use App\Entity\Payment;
 use App\Entity\SummaryArticle;
 use App\Form\PaymentType;
+use HttpResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SoapClient;
@@ -94,8 +95,12 @@ class PaymentController extends Controller
             return $this->redirectToRoute('payment_done', ['id' => $payment->getId()]);
         }
         if ($payment->getReferenceId() == null || $payment->getReferenceId() == '') {
-            if (!$this->getReferenceFor($payment)) {
-//                return $this->get
+            try {
+                $this->getReferenceFor($payment);
+            } catch (\Exception $e) {
+                return $this->render('payment_error.html.twig', [
+                    'message' => $e->getMessage()
+                ]);
             }
         }
 
@@ -200,7 +205,7 @@ class PaymentController extends Controller
                 $em->flush();
             }
         } catch (\Exception $e) {
-            return false;
+            throw $e;
         }
         return true;
     }
