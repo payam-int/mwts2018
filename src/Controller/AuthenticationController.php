@@ -39,6 +39,8 @@ class AuthenticationController extends Controller
 
         // get the login error if there is one
         $error = $authUtils->getLastAuthenticationError();
+        if ($error != null)
+            $error = $error->getMessage();
 
         $user = new User();
         $form = $this->createForm(UserLoginType::class, $user);
@@ -62,13 +64,6 @@ class AuthenticationController extends Controller
         $form = $this->createForm(UserRegisterType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $registrationType = $user->getRegistrationType();
-            $registrationRoles = $registrationType->getRoles();
-
-            if ($registrationRoles != null) {
-                $user->setRoles(array_merge($user->getRoles(), $registrationRoles));
-            }
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
