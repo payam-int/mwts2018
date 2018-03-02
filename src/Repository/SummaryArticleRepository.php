@@ -20,6 +20,7 @@ class SummaryArticleRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('s')
             ->orderBy('s.id', 'DESC')
+            ->where('s.user = :uid')->setParameter('uid', $value->getId())
             ->getQuery()
             ->getResult();
     }
