@@ -1,1 +1,1 @@
-require('../img/mwts2018.svg');
+require('../img/logo.png');
