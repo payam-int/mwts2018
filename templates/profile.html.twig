@@ -10,12 +10,12 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <nav class="nav nav-fill flex-column">
-                                <a class="nav-link active" href="{{ url('profile') }}">About conference</a>
+                            <nav class="nav nav-fill flex-column nav-pills">
+                                <a class="nav-link {% if app.request.attributes.get('_route') == 'profile' %}active{% endif %}" href="{{ url('profile') }}">About conference</a>
                                 <a class="nav-link disabled">Conference registration</a>
-                                <a class="nav-link" href="{{ url('profile_articles') }}">Papers</a>
-                                <a class="nav-link" href="{{ url('profile_edit') }}">Edit information</a>
-                                <a class="nav-link" href="{{ url('logout') }}">Logout</a>
+                                <a class="nav-link {% if app.request.attributes.get('_route') starts with 'profile_articles' %}active{% endif %}" href="{{ url('profile_articles') }}">Papers</a>
+                                <a class="nav-link {% if app.request.attributes.get('_route') starts with 'profile_edit' %}active{% endif %}" href="{{ url('profile_edit') }}">Edit information</a>
+                                <a class="nav-link {% if app.request.attributes.get('_route') starts with 'logout' %}active{% endif %}" href="{{ url('logout') }}">Logout</a>
                                 <a class="nav-link" href="#">Return to website</a>
                             </nav>
                         </div>
