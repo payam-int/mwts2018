@@ -15,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PaymentController extends Controller
 {
@@ -168,7 +169,7 @@ class PaymentController extends Controller
             'username' => $default_params['username'],
             'password' => $default_params['password'],
             'bankid' => $default_params['bankid'],
-            'callbackurl' => $this->generateUrl('payment_done', ['id' => $payment->getId()]),
+            'callbackurl' => $this->generateUrl('payment_done', ['id' => $payment->getId()],UrlGeneratorInterface::ABSOLUTE_URL),
             'name' => $user->getFullName(),
             'family' => $user->getFullName(),
             'nc' => $user->getNationalCode(),
@@ -178,7 +179,6 @@ class PaymentController extends Controller
             'email' => $user->getEmail(),
             'amount' => $payment->calcAmount(),
         ];
-
 
         $wsdl = 'https://payment.sharif.ir/research/ws.asmx?wsdl';
 
