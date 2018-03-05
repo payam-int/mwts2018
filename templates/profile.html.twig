@@ -10,19 +10,42 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <nav class="nav nav-fill flex-column nav-pills">
-                                <a class="nav-link {% if app.request.attributes.get('_route') == 'profile' %}active{% endif %}" href="{{ url('profile') }}">About conference</a>
-                                <a class="nav-link disabled">Conference registration</a>
-                                <a class="nav-link {% if app.request.attributes.get('_route') starts with 'profile_articles' %}active{% endif %}" href="{{ url('profile_articles') }}">Papers</a>
-                                <a class="nav-link {% if app.request.attributes.get('_route') starts with 'profile_edit' %}active{% endif %}" href="{{ url('profile_edit') }}">Edit information</a>
-                                <a class="nav-link {% if app.request.attributes.get('_route') starts with 'logout' %}active{% endif %}" href="{{ url('logout') }}">Logout</a>
-                                <a class="nav-link" href="#">Return to website</a>
-                            </nav>
+                            <ul class="nav flex-column nav-pills">
+                                <li class="nav-item"><a
+                                            class="nav-link {% if app.request.attributes.get('_route') == 'profile' %}active{% endif %}"
+                                            href="{{ url('profile') }}">About conference</a></li>
+                                <li class="nav-item"><a class="nav-link disabled">Conference registration</a></li>
+                                <li class="nav-item"><a
+                                            class="nav-link {% if app.request.attributes.get('_route') starts with 'profile_articles' %}active{% endif %}"
+                                            href="{{ url('profile_articles') }}">Papers</a>
+                                    {% if app.request.attributes.get('_route') == 'profile_articles' %}
+                                        <ul class="nav flex-column">
+                                            <li class="nav-item"><a href="#author-guide-lines">Authors Guidelines</a>
+                                            </li>
+                                            <li class="nav-item"><a href="#official-call-for-papers">Official Call for
+                                                    Papers</a></li>
+                                            <li class="nav-item"><a href="#important-dates">Important Dates</a></li>
+                                            <li class="nav-item"><a href="#sending-papers">Sending Papers</a></li>
+                                            <li class="nav-item"><a href="#sent-papers">Sent papers</a></li>
+                                        </ul>
+                                    {% endif %}
+                                </li>
+                                <li class="nav-item"><a
+                                            class="nav-link {% if app.request.attributes.get('_route') starts with 'profile_edit' %}active{% endif %}"
+                                            href="{{ url('profile_edit') }}">Edit information</a></li>
+                                <li class="nav-item"><a
+                                            class="nav-link {% if app.request.attributes.get('_route') starts with 'profile_payments' %}active{% endif %}"
+                                            href="{{ url('profile_payments') }}">Your payments</a></li>
+                                <li class="nav-item"><a
+                                            class="nav-link {% if app.request.attributes.get('_route') starts with 'logout' %}active{% endif %}"
+                                            href="{{ url('logout') }}">Logout</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#">Return to website</a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-9 pt-3">
+            <div class="col-md-9 pt-3 px-5">
                 {% block content %}{% endblock %}
             </div>
         </div>

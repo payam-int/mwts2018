@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -36,7 +37,7 @@ class Payment
      * @var string
      * @ORM\Column(type="string")
      */
-    private $online_payment_price;
+    private $onlinePaymentPrice;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="payments")
@@ -68,16 +69,29 @@ class Payment
      */
     private $discounts;
 
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $creationDate;
+
+    /**
+     * @ORM\Column(type="datetime",nullable=true)
+     */
+    private $doneDate;
+
+
     /**
      * Payment constructor.
      * @param string $price
      * @param $user
      */
-    public function __construct($price, $user)
+    public function __construct($price = '', $user = null)
     {
         $this->price = $price;
-        $this->online_payment_price = $price;
+        $this->onlinePaymentPrice = $price;
         $this->user = $user;
+        $this->creationDate = new \DateTime();
     }
 
     /**
@@ -181,15 +195,15 @@ class Payment
      */
     public function getOnlinePaymentPrice()
     {
-        return $this->online_payment_price;
+        return $this->onlinePaymentPrice;
     }
 
     /**
-     * @param mixed $online_payment_price
+     * @param mixed $onlinePaymentPrice
      */
-    public function setOnlinePaymentPrice($online_payment_price)
+    public function setOnlinePaymentPrice($onlinePaymentPrice)
     {
-        $this->online_payment_price = $online_payment_price;
+        $this->onlinePaymentPrice = $onlinePaymentPrice;
     }
 
     /**
@@ -229,7 +243,37 @@ class Payment
         $this->done = $done;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getCreationDate()
+    {
+        return $this->creationDate;
+    }
 
+    /**
+     * @param mixed $creationDate
+     */
+    public function setCreationDate($creationDate)
+    {
+        $this->creationDate = $creationDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDoneDate()
+    {
+        return $this->doneDate;
+    }
+
+    /**
+     * @param mixed $doneDate
+     */
+    public function setDoneDate($doneDate)
+    {
+        $this->doneDate = $doneDate;
+    }
 
 
 }

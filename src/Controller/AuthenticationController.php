@@ -2,14 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\ResetPasswordToken;
 use App\Entity\User;
+use App\Form\ChangePasswordType;
+use App\Form\ResetPasswordType;
 use App\Form\UserLoginType;
 use App\Form\UserRegisterType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -99,6 +105,91 @@ class AuthenticationController extends Controller
     public function logout(): void
     {
         throw new \Exception('This should never be reached!');
+    }
+
+    /**
+     * @Route("/user/reset", name="reset_password")
+     */
+    public function resetPassword(Request $request, \Swift_Mailer $mailer)
+    {
+        $form = $this->createForm(ResetPasswordType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $submitted = $form->getData();
+            $email = $submitted['email'];
+
+            $em = $this->getDoctrine()->getManager();
+            $usersRepository = $this->getDoctrine()->getRepository(User::class);
+            $user = $usersRepository->findByEmail($email);
+            if ($user != null) {
+                $hash = new ResetPasswordToken($user);
+                $em->persist($hash);
+                $em->flush();
+
+                $reset_url = $this->generateUrl('reset_password_token', ['token' => $hash->getHash()], UrlGeneratorInterface::ABSOLUTE_URL);
+
+                $message = (new \Swift_Message('Hello Email'))
+                    ->setFrom('send@example.com')
+                    ->setTo('recipient@example.com')
+                    ->setBody(
+                        $this->renderView('emails/password_reset.html.twig', ['loginUrl' => $reset_url, 'hash' => $hash]),
+                        'text/html'
+                    )->addPart(
+                        $this->renderView('emails/password_reset.txt.twig', ['loginUrl' => $reset_url, 'hash' => $hash]),
+                        'text/plain'
+                    );
+
+                $mailer->send($message);
+
+                return $this->renderView('emails/password_reset.txt.twig', ['loginUrl' => $reset_url, 'hash' => $hash]);
+
+            }
+        }
+
+        return $this->render('admin.reset_password.html.twig', [
+            'form' => $form->createView()
+        ]);
+
+    }
+
+    /**
+     * @Route("/user/reset/{token}", name="reset_password_token")
+     * @Entity("hash", expr="repository.find(token)")
+     */
+    public function resetPasswordToken(Request $request, ResetPasswordToken $hash)
+    {
+        $this->login_after_register($request, $hash->getUser());
+
+        return $this->redirectToRoute('password_change');
+    }
+
+    /**
+     * @Route("/user/password/change", name="password_change")
+     */
+    public function changePassword(Request $request)
+    {
+        $form = $this->createForm(ChangePasswordType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $data = $form->getData();
+            if ($data['password'] != $data['password2']) {
+                $form->addError(new FormError('Passwords are not the same.'));
+            }
+            if ($form->isValid()) {
+                $user = $this->getUser();
+                $user->setPlainPassword($data['password']);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($user);
+                $em->flush();
+            }
+        }
+
+        return $this->render('admin.change_password.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
 }

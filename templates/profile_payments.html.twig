@@ -1,27 +1,26 @@
 {% extends 'profile.html.twig' %}
 {% block title %}About conference{% endblock %}
 {% block content %}
-    <h1>About conference</h1>
-    <p>The third term of the Modern Wireless Telecommunication Systems conference will be held from the 16th to the 18th
-        of April, 2018 at the Sharif university of technology.
-        The main topics of the conference are as follows:
-    <ul>
-        <li>Automative</li>
-        <li>Internet of Things (IOT)</li>
-        <li>Smart City</li>
-        <li>Mobile Broadband</li>
-        <li>eHealth</li>
-        <li>eBanking</li>
-        <li>Smart Grid</li>
-        <li> Blockchain</li>
-        <li>Teleoperation</li>
-    </ul>
-    If you have a paper to present in any of the abovementioned topics send them to through <a
-        href="{{ url('profile_articles') }}">this
-    link</a>.
-    The deadline of the abstract submission is 6th March and the final submission deadline is 13th March.
-    Received papers will be reviewed by the scientific committee; if your papers are accepted by the commitee you
-    will be allotted a time slot to present your paper.
-    Accepted papers will be indexed in Civilica and ISC.</p>
+    <h2>Your payments</h2>
+
+    <br>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Payment Id</th>
+            <th scope="col">Price</th>
+            <th scope="col">Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for payment in payments %}
+            <tr>
+                <th scope="row">{{ payment.id }}</th>
+                <td>{{ payment.getOnlinePaymentPrice }}</td>
+                <td>{{ payment.doneDate.format('D, d M Y H:i:s') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}

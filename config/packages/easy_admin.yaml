@@ -29,6 +29,8 @@ easy_admin:
       Payment:
         label: 'Payments'
         class: App\Entity\Payment
+        list:
+          fields: ['id','referenceId', 'price', 'onlinePaymentPrice','done','creationDate', 'doneDate']
       SummaryArticle:
         label: 'Summary of articles'
         class: App\Entity\SummaryArticle

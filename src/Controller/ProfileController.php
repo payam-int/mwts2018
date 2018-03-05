@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\Payment;
 use App\Entity\SummaryArticle;
 use App\Form\ArticleType;
 use App\Form\SummaryArticleType;
@@ -118,12 +119,16 @@ class ProfileController extends Controller
     }
 
     /**
-     * @Route("/profile/tickets", name="profile_ticket")
+     * @Route("/profile/payments", name="profile_payments")
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      */
-    public function tickets(Request $request, AuthorizationCheckerInterface $authChecker)
+    public function payments(Request $request, AuthorizationCheckerInterface $authChecker)
     {
-        return $this->render('profile_conf.html.twig');
+
+        $payments = $this->getDoctrine()->getRepository(Payment::class)->findByUser($this->getUser());
+        return $this->render('profile_payments.html.twig', [
+            'payments' => $payments
+        ]);
     }
 
     /**

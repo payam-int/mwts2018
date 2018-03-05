@@ -15,6 +15,8 @@ framework:
         log: true
     assets:
         json_manifest_path: '%kernel.project_dir%/public/assets/manifest.json'
+        base_urls:
+         - 'http://mwts2018.sharif.edu/ums/public/'
     cache:
         # Put the unique name of your app here: the prefix seed
         # is used to compute stable namespaces for cache keys.

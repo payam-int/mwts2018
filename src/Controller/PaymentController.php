@@ -132,6 +132,7 @@ class PaymentController extends Controller
         $em = $this->getDoctrine()->getManager();
         if (!$payment->getDone() && $this->checkIfPaymentDone($payment)) {
             $payment->setDone(true);
+            $payment->setDoneDate(new \DateTime());
             $meta = $payment->getMetadata();
             $em->persist($payment);
             if ($meta['type'] == 'abstract') {
@@ -169,7 +170,7 @@ class PaymentController extends Controller
             'username' => $default_params['username'],
             'password' => $default_params['password'],
             'bankid' => $default_params['bankid'],
-            'callbackurl' => $this->generateUrl('payment_done', ['id' => $payment->getId()],UrlGeneratorInterface::ABSOLUTE_URL),
+            'callbackurl' => $this->generateUrl('payment_done', ['id' => $payment->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
             'name' => $user->getFullName(),
             'family' => $user->getFullName(),
             'nc' => $user->getNationalCode(),
